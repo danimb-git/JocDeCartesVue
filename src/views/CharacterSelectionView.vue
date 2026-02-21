@@ -38,10 +38,23 @@ const selectedCharacters = computed(() => {
     .filter((entry) => selectedSet.has(entry.key))
 })
 
+const selectedPokemonData = computed(() => {
+  const selectedSet = new Set(selectedCardKeys.value)
+
+  return pokemons.value
+    .map((pokemon, index) => ({
+      key: getPokemonKey(pokemon, index),
+      pokemon
+    }))
+    .filter((entry) => selectedSet.has(entry.key))
+    .map((entry) => entry.pokemon)
+})
+
 watch(
-  () => selectedCardKeys.value.length,
-  (count) => {
-    selectionState.selectedCount = count
+  selectedPokemonData,
+  (selectedPokemons) => {
+    selectionState.selectedCount = selectedPokemons.length
+    selectionState.selectedPokemons = [...selectedPokemons]
   },
   { immediate: true }
 )
@@ -71,7 +84,9 @@ const fetchPokemons = async () => {
 onMounted(fetchPokemons)
 
 onUnmounted(() => {
-  selectionState.selectedCount = 0
+  if (selectionState.selectedPokemons.length < 2) {
+    selectionState.selectedCount = 0
+  }
 })
 </script>
 

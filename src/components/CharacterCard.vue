@@ -12,7 +12,15 @@ const props = defineProps({
   },
   cardKey: {
     type: String,
-    required: true,
+    default: "",
+  },
+  showMovesButton: {
+    type: Boolean,
+    default: true,
+  },
+  showSelectButton: {
+    type: Boolean,
+    default: true,
   },
 });
 const emit = defineEmits(["toggle-select"]);
@@ -48,6 +56,10 @@ const defense = computed(
 );
 
 const toggleSelected = () => {
+  if (!props.showSelectButton) {
+    return;
+  }
+
   emit("toggle-select", props.cardKey);
 };
 
@@ -93,6 +105,7 @@ const showMovesAlert = () => {
       <p class="pokemon-speed">Speed: {{ pokemon.speed ?? "-" }}</p>
 
       <button
+        v-if="showMovesButton"
         type="button"
         class="pokemon-moves-button"
         @click="showMovesAlert"
@@ -101,7 +114,12 @@ const showMovesAlert = () => {
       </button>
     </div>
 
-    <button type="button" class="pokemon-select-button" @click="toggleSelected">
+    <button
+      v-if="showSelectButton"
+      type="button"
+      class="pokemon-select-button"
+      @click="toggleSelected"
+    >
       {{ selected ? "Deselect" : "Select" }}
     </button>
   </div>
