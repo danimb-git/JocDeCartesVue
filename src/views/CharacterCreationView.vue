@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 import movesCatalog from "../data/moves.json";
 
 const MOVE_SLOT_COUNT = 4;
-const API_URL = "https://retoolapi.dev/2whK5V/data";
+const API_URL = "https://retoolapi.dev/LaiHmW/data";
 const router = useRouter();
 
 const pokemonTypes = [
@@ -85,7 +85,7 @@ const createPokemon = async () => {
     types: types.join(", "),
     sprite: pokemonForm.sprite,
     attack: pokemonForm.attack,
-    defese: pokemonForm.defense,
+    defense: pokemonForm.defense,
     hp: pokemonForm.hp,
     speed: pokemonForm.speed,
     moves: selectedMoves.value.map((move) => move.name).join(", "),
