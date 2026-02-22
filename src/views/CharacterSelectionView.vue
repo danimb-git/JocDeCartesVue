@@ -27,17 +27,6 @@ const toggleCardSelection = (cardKey) => {
   selectedCardKeys.value.push(cardKey)
 }
 
-const selectedCharacters = computed(() => {
-  const selectedSet = new Set(selectedCardKeys.value)
-
-  return pokemons.value
-    .map((pokemon, index) => ({
-      key: getPokemonKey(pokemon, index),
-      name: pokemon.name ?? 'Unknown'
-    }))
-    .filter((entry) => selectedSet.has(entry.key))
-})
-
 const selectedPokemonData = computed(() => {
   const selectedSet = new Set(selectedCardKeys.value)
 
@@ -94,14 +83,6 @@ onUnmounted(() => {
   <main class="character-selection">
     <h1>Character Selection</h1>
 
-    <div class="selection-indicator">
-      <p><strong>Selected:</strong> {{ selectedCardKeys.length }}/2</p>
-      <p>
-        <strong>Characters:</strong>
-        {{ selectedCharacters.length ? selectedCharacters.map((character) => character.name).join(', ') : 'None' }}
-      </p>
-    </div>
-
     <p v-if="isLoading">Loading pokemons...</p>
     <p v-else-if="errorMessage">{{ errorMessage }}</p>
     <p v-else-if="!pokemons.length">No pokemons found in API.</p>
@@ -130,14 +111,6 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   gap: 20px;
-}
-
-.selection-indicator {
-  padding: 10px 14px;
-  border: 2px solid #fcd64d;
-  border-radius: 12px;
-  background: rgb(255 255 255 / 80%);
-  box-shadow: 0 1px 10px rgb(0 0 0 / 12%);
 }
 
 .pokedex {

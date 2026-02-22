@@ -34,6 +34,7 @@ const battleMessage = ref('')
 const isMessageVisible = ref(false)
 const isLoading = ref(true)
 const isBattleOver = ref(false)
+const isTurnLocked = ref(false)
 
 const splitByComma = (value) => {
   if (!value) {
@@ -134,9 +135,11 @@ const calculateDamage = (attacker, defender, move) => {
 }
 
 const performAttack = async (attackerIndex, move) => {
-  if (isBattleOver.value || attackerIndex !== activeAttackerIndex.value) {
+  if (isBattleOver.value || isTurnLocked.value || attackerIndex !== activeAttackerIndex.value) {
     return
   }
+
+  isTurnLocked.value = true
 
   const defenderIndex = attackerIndex === 0 ? 1 : 0
   const attacker = pokedex.value[attackerIndex]
@@ -151,6 +154,7 @@ const performAttack = async (attackerIndex, move) => {
   if (!result.hit) {
     activeAttackerIndex.value = defenderIndex
     await showBattleMessage(`${attacker.name} falló el ataque ${move.name}!`)
+    isTurnLocked.value = false
     return
   }
 
@@ -169,9 +173,10 @@ const performAttack = async (attackerIndex, move) => {
   }
 
   activeAttackerIndex.value = defenderIndex
+  isTurnLocked.value = false
 }
 
-const canUseMoves = (index) => !isBattleOver.value && index === activeAttackerIndex.value
+const canUseMoves = (index) => !isBattleOver.value && !isTurnLocked.value && index === activeAttackerIndex.value
 
 const initFight = async () => {
   const selected = selectionState.selectedPokemons
@@ -293,7 +298,7 @@ onMounted(initFight)
   margin: 40px 120px;
   width: calc(100vw - 240px);
   height: calc(100vh - 80px);
-  background-image: url('/background.jpg');
+  background-image: url("@/assets/background.jpg");
   background-size: cover;
   background-position: center;
   box-sizing: border-box;
