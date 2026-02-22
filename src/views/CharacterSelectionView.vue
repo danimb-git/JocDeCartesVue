@@ -114,10 +114,12 @@ onUnmounted(() => {
 }
 
 .pokedex {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 26px;
-  max-width: 1100px;
-  margin: 0 auto;
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 </style>
